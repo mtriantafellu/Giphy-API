@@ -8,10 +8,11 @@
 
 $(document).ready(function() {
 
+	//Global Variables
 	var APIkey = "dc6zaTOxFJmzC";
 
 	var cars = [
-		"Dodge Caliber",
+		"Pontiac Firebird",
 		"Ford Mustang",
 		"Chevy Camero",
 		"Dodge Challenger",
@@ -19,12 +20,14 @@ $(document).ready(function() {
 		"Dodge Dart",
 		"AMC Javelin",
 		"Chevy Corvette",
-		"Pontiac Firebird",
+
 		"Chevy Chevelle",
 		];
 
+	//first Function to Display Car Info
 	function displayCarInfo() {
 
+      	var state = $(this).attr("data-state");
 		var car = $(this).attr("data-name");
 
 		var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + car + "&api_key=dc6zaTOxFJmzC&tag=&limit=5";
@@ -63,12 +66,21 @@ $(document).ready(function() {
 
 				};  //End if Loop
 
+			if (state === "still") {
+        		$(this).attr("src", $(this).attr("data-animate"));
+        		$(this).attr("data-state", "animate");
+      		} else {
+        		$(this).attr("src", $(this).attr("data-still"));
+        		$(this).attr("data-state", "still");
+        	};  //End If Loop
+
 			};  //End for Loop
 
 		});  //End .done Function
 
 	}; //End displayCarInfo Function
 
+	//Render Buttons in new divs for each item in array
 	function renderBtns() {
 
 		$("#divBtns").empty();
@@ -78,6 +90,8 @@ $(document).ready(function() {
 			var add = $("<button>");
 
 			add.addClass("car");
+
+			add.addClass("data-state");
 
 			add.attr("data-name", cars[i]);
 
@@ -89,6 +103,7 @@ $(document).ready(function() {
 
 	};  //End renderBtns Function
 
+	//On.Click to display button names and input
 	$("#add-car").on("click", function(event) {
 
 		event.preventDefault();
@@ -100,6 +115,8 @@ $(document).ready(function() {
 		renderBtns();
 
 		displayCarInfo(car);
+
+		$(document).on("click", displayCarInfo);
 
 	}); //End Add-Car.onClick Function
 

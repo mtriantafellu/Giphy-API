@@ -1,3 +1,26 @@
-button, div, form, input {
-      margin: 10px;
-    }
+.jumbotron-billboard {
+	background-color: transparent;
+}
+.panel {
+	background-color: transparent;
+	border: none;
+}
+body {
+	 background-image: url("../images/carBG.jpg");
+	 background-repeat: no-repeat;
+	 background-attachment: fixed;
+}
+
+h1 {
+	font-size: 50px;
+	text-align: center;
+}
+
+label {
+	color: Black;
+}
+
+#divBtns {
+	color: Black;
+
+}
