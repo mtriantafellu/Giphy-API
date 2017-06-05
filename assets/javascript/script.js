@@ -1,184 +1,110 @@
 //IDs:
-//#divBtn
-//#searchBtn
-//#input
-//#image
-//#rating
- 
-//API Key:
+//.container
+//#divBtns
+//#car-form
+//#car-input
+//#add-car
+//#cars-view
 
+$(document).ready(function() {
 
+	var APIkey = "dc6zaTOxFJmzC";
 
-//Giphy API URL + API Key:
+	var cars = [
+		"Dodge Caliber",
+		"Ford Mustang",
+		"Chevy Camero",
+		"Dodge Challenger",
+		"Plymouth Barracuda",
+		"Dodge Dart",
+		"AMC Javelin",
+		"Chevy Corvette",
+		"Pontiac Firebird",
+		"Chevy Chevelle",
+		];
 
-//var queryURLbase = "http://api.giphy.com/v1/gifs/random&tag=" + searchTerm + "&api_key=" + APIkey + "&limit=10";
+	function displayCarInfo() {
 
-//var queryURLBase = "http://api.giphy.com/v1/gifs/random?api_key=" + APIkey + "&tag=" + searchTerm;
+		var car = $(this).attr("data-name");
 
-$(document).ready(function(){
-  console.log("ready!");
+		var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + car + "&api_key=dc6zaTOxFJmzC&tag=&limit=5";
 
-var APIkey = "dc6zaTOxFJmzC";
+		$.ajax({
+			url: queryURL,
+			method: "GET"
+		}).done(function(response) {
+			
+			console.log(response);
 
-var cars = [
-  "Ford Mustang",
-  "Chevy Camero",
-  "Dodge Viper",
-];
+			var results = response.data;
 
-//Pressing Enter now initializes the search button
-//$("#input").keyup(function(event){
-    //if(event.keyCode == 13){
-        //$("#searchBtn").click();
-    //}
-//});
-//End Enter Button
+			for (var i = 0; i < results.length; i++) {
 
-function displayCarInfo() {
+				if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
 
-var searchTerm = "";
-var queryURLBase = "http://api.giphy.com/v1/gifs/random?api_key=" + APIkey + "&tag=" + searchTerm;
+				var carDiv = $("<div class='car'>");
 
-  var car = $(this).attr(".car");
-  var queryURL = queryURLbase + searchTerm;
+				var rating = results[0].rating;
 
-    $.ajax({
-      url: queryURL,
-      method: 'GET'
-    })
+					console.log("response", response);
 
-    .done(function(response) {
-      
-      console.log("done response", response);
+				var pOne = $("<p>").text("Rating: " + rating);
 
-      var carDiv = $("<div class='car'>");
+				carDiv.append(pOne);
 
-      var rating = response.data.Rated;
+				var imgURL = results[i].images.fixed_height.url;
+				
+				var image = $("<img>").attr("src", imgURL);
 
-      var p0ne = $("<p>").text("Rating:" + rating);
+				carDiv.append(pOne);	
+				carDiv.append(image);
 
-      carDiv.append(pOne);
+				$("#cars-view").prepend(carDiv);
 
-      var imageURL = response.data.image_original_url;
+				};  //End if Loop
 
-      var image = $("<img>");
+			};  //End for Loop
 
-      image.attr("src", imageURL);
+		});  //End .done Function
 
-      image.attr("alt", "image");
+	}; //End displayCarInfo Function
 
-      $("#image").prepend(image);
+	function renderBtns() {
 
-    });  //End .done function
+		$("#divBtns").empty();
 
-// End Button Click
+		for (var i = 0; i < cars.length; i++) {
 
-}// End Function displayCarInfo
+			var add = $("<button>");
 
-function renderButtons() {
-  $("#divBtn").empty();
+			add.addClass("car");
 
-  for (var i = 0; i < cars.length; i++) {
+			add.attr("data-name", cars[i]);
 
-    var a = $("<button>");
+			add.text(cars[i]);
 
-    a.addClass("car");
-    a.attr("data-name", cars[i]);
-    a.text(cars[i]);
-    $("divBtn").append(a);
+			$("#divBtns").append(add);
 
-  };
-};
+		};  //End For Loop
 
-$("#searchBtn").on("click", function(event) {
+	};  //End renderBtns Function
 
-  event.preventDefault();
+	$("#add-car").on("click", function(event) {
 
-  var car = $("input").val().trim();
+		event.preventDefault();
 
-  cars.push(car);
+		var car = $("#car-input").val().trim();
 
-  renderButtons();
+		cars.push(car);
 
-  console.log("ready2");
-});
+		renderBtns();
 
-$(document).on("click", ".car", displayCarInfo);
+		displayCarInfo(car);
 
-renderButtons();
+	}); //End Add-Car.onClick Function
 
-});// End document.ready
+	$(document).on("click", ".car", displayCarInfo);
 
+	renderBtns();
 
-
-
-
-
-// Previous!!!
-/*
-//On.Button Click:
-$("#searchBtn").on("click", function(event) {
-
-  event.preventDefault();
-
-  //  Empties the region associated with the pictures
-  //  $("#well-section").empty();
-
-  searchTerm = $("input").val().trim();
-  var queryURL = queryURLbase;
-
-    $.ajax({
-      url: queryURL,
-      method: 'GET'
-    })
-
-    .done(function(response) {
-      
-      console.log(response);
-
-      var imageURL = response.data.image_original_url;
-
-      var image = $("<img>");
-
-      image.attr("src", imageURL);
-
-      image.attr("alt", "image");
-
-      $("#image").prepend(image);
-
-    });  //End .done function
-
-}); // End Button Click
-
-function renderButtons() {
-  $("#divBtn").empty();
-
-  for (var i = 0; i < cars.length; i++) {
-
-    var a = $("<button>");
-
-    a.addClass("car");
-    a.attr("data-name", cars[i]);
-    a.text(cars[i]);
-    $("divBtn").append(a);
-
-  };
-};
-
-$("#searchBtn").on("click", function(event) {
-
-  event.preventDefault();
-
-  var car = $("input").val().trim();
-
-  cars.push(car);
-
-  renderButtons();
-
-  console.log("ready2");
-});
-
-renderButtons();
-
-});// End document.ready
-*/
+}); //End Document.ready
