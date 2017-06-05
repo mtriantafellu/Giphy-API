@@ -17,10 +17,23 @@ h1 {
 }
 
 label {
-	color: Black;
+	color: black;
 }
 
 #divBtns {
-	color: Black;
+	color: black;
 
+}
+
+label {
+	border-color: black;
+	border-width: 2px;
+}
+
+input {
+	border-color: black;
+}
+
+.car {
+	color: black;
 }
