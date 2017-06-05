@@ -1,15 +1,25 @@
 //IDs:
+//#divBtn
 //#searchBtn
 //#input
 //#image
+//#rating
  
 //API Key:
+
 var APIKey = "dc6zaTOxFJmzC";
 var searchTerm = "";
+var cars = [
+  "Ford Mustang",
+  "Chevy Camero",
+  "Dodge Viper",
+];
 
 //Giphy API URL + API Key:
 var queryURLBase = "http://api.giphy.com/v1/gifs/random?api_key=" + APIKey + "&tag=" + searchTerm;
 
+$(document).ready(function(){
+  console.log("ready!");
 //Pressing Enter now initializes the search button
 $("#input").keyup(function(event){
     if(event.keyCode == 13){
@@ -22,13 +32,13 @@ $("#input").keyup(function(event){
 $("#searchBtn").on("click", function(event) {
 
 
-	event.preventDefault();
+  event.preventDefault();
 
-	//  Empties the region associated with the pictures
-	//  $("#well-section").empty();
+  //  Empties the region associated with the pictures
+  //  $("#well-section").empty();
 
-	searchTerm = $("input").val().trim();
-	var queryURL = queryURLBase + searchTerm;
+  searchTerm = $("input").val().trim();
+  var queryURL = queryURLBase + searchTerm;
 
     $.ajax({
       url: queryURL,
@@ -41,31 +51,44 @@ $("#searchBtn").on("click", function(event) {
 
       var imageURL = response.data.image_original_url;
 
-      var planeImage = $("<img>");
+      var image = $("<img>");
 
-      planeImage.attr("src", imageURL);
+      image.attr("src", imageURL);
 
-      planeImage.attr("alt", "plane image");
+      image.attr("alt", "image");
 
-      $("#image").prepend(planeImage);
+      $("#image").prepend(image);
 
     });  //End .done function
 
 }); // End Button Click
 
-// Start and stop images
-$("#image").on("click", function() {
-      // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
-      var state = $(this).attr("data-state");
-      // If the clicked image's state is still, update its src attribute to what its data-animate value is.
-      // Then, set the image's data-state to animate
-      // Else set src to the data-still value
-      if (state === "animate") {
-        $(this).attr("src", $(this).attr("data-animate"));
-        $(this).attr("data-state", "animate");
-      } else {
-        $(this).attr("src", $(this).attr("data-still"));
-        $(this).attr("data-state", "still");
-      }
-});  // End Start and stop images
+function renderButtons() {
+  $("#divBtn").empty();
 
+  for (var i = 0; i < cars.length; i++) {
+
+    var a = $("<button>");
+
+    a.addClass("car");
+    a.attr("data-name", cars[i]);
+    a.text(cars[i]);
+    $("divBtn").append(a);
+
+  };
+};
+
+$("#searchBtn").on("click", function(event) {
+
+  event.preventDefault();
+
+  var car = $("input").val().trim();
+
+  cars.push(car);
+
+  renderButtons();
+});
+
+renderButtons();
+
+});// End document.ready
