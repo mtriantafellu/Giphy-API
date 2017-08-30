@@ -1,8 +1,10 @@
 # Giphy-API
 Week 4 Monday assignment
 
+
 # Requirements
 As outlined in homework
+
 
 # Purpose:
 
